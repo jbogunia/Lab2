@@ -13,6 +13,8 @@
 		4B48D06723C7C69700F2207F /* Lab2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4B48D06523C7C69700F2207F /* Lab2.xcdatamodeld */; };
 		4B48D06923C7C69D00F2207F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B48D06823C7C69D00F2207F /* Assets.xcassets */; };
 		4B48D06C23C7C69D00F2207F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B48D06A23C7C69D00F2207F /* LaunchScreen.storyboard */; };
+		4B48D07423C7C6DD00F2207F /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48D07323C7C6DD00F2207F /* Sensor.swift */; };
+		4B48D07623C7C72700F2207F /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48D07523C7C72700F2207F /* DBHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		4B48D06823C7C69D00F2207F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B48D06B23C7C69D00F2207F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4B48D06D23C7C69D00F2207F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4B48D07323C7C6DD00F2207F /* Sensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
+		4B48D07523C7C72700F2207F /* DBHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,8 @@
 				4B48D06A23C7C69D00F2207F /* LaunchScreen.storyboard */,
 				4B48D06D23C7C69D00F2207F /* Info.plist */,
 				4B48D06523C7C69700F2207F /* Lab2.xcdatamodeld */,
+				4B48D07323C7C6DD00F2207F /* Sensor.swift */,
+				4B48D07523C7C72700F2207F /* DBHelper.swift */,
 			);
 			path = Lab2;
 			sourceTree = "<group>";
@@ -139,6 +145,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4B48D06723C7C69700F2207F /* Lab2.xcdatamodeld in Sources */,
+				4B48D07423C7C6DD00F2207F /* Sensor.swift in Sources */,
+				4B48D07623C7C72700F2207F /* DBHelper.swift in Sources */,
 				4B48D06123C7C69700F2207F /* ViewController.swift in Sources */,
 				4B48D05F23C7C69700F2207F /* AppDelegate.swift in Sources */,
 			);

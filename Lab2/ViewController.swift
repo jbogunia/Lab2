@@ -9,10 +9,20 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    var db:DBHelper = DBHelper()
+    var sensors:[Sensor] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        db.createTable()
+        db.insertSensor(name: "test", description: "test")
+        db.insertSensor(name: "test2", description: "test2")
+        
+        sensors = db.readSensors()
+        
+        print(sensors)
     }
 
 
