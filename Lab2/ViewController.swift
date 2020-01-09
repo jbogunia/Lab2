@@ -12,17 +12,33 @@ class ViewController: UIViewController {
     
     var db:DBHelper = DBHelper()
     var sensors:[Sensor] = []
+    var readings:[Reading] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        db.createTable()
-        db.insertSensor(name: "test", description: "test")
+
+        db.insertSensor(name: "Name test", description: "DescTest")
         db.insertSensor(name: "test2", description: "test2")
+        db.insertReading(date: Date(), value: 52, sensorId: 1)
         
         sensors = db.readSensors()
         
-        print(sensors)
+        readings = db.readReadings()
+        
+        print("Sensors from DB")
+    
+        for sensor in sensors {
+            print(sensor.name + " " + sensor.description)
+        }
+        
+        
+        print("Readings from DB")
+        
+        for reading in readings {
+            print(reading.date)
+        }
+        
     }
 
 

@@ -9,7 +9,10 @@ class DBHelper
         
         db = openDatabase()
         dropSensorTable()
-        createTable()
+        dropReadingsTable()
+        createSensorTable()
+        createReadingsTable()
+        
     }
     
     let dbPath: String = "myDb.sqlite"
@@ -32,7 +35,7 @@ class DBHelper
         }
     }
     
-    func createTable() {
+    func createSensorTable() {
         let createTableString = "CREATE TABLE IF NOT EXISTS sensor(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT);"
         var createTableStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK
@@ -49,6 +52,22 @@ class DBHelper
         sqlite3_finalize(createTableStatement)
     }
     
+    func createReadingsTable() {
+        let createTableString = "CREATE TABLE IF NOT EXISTS reading(id INTEGER PRIMARY KEY AUTOINCREMENT,date TEXT, value REAL, sensorId INTEGER, FOREIGN KEY (sensorId) REFERENCES Sensor (id));"
+        var createTableStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK
+        {
+            if sqlite3_step(createTableStatement) == SQLITE_DONE
+            {
+                print("readings table created.")
+            } else {
+                print("readings table could not be created.")
+            }
+        } else {
+            print("CREATE TABLE statement could not be prepared.")
+        }
+        sqlite3_finalize(createTableStatement)
+    }
     
     func insertSensor(name:String, description:String)
     {
@@ -78,20 +97,76 @@ class DBHelper
         sqlite3_finalize(insertStatement)
     }
     
+    func insertReading(date:Date, value:Float, sensorId:Int)
+    {
+        let readings = readReadings()
+        for r in readings
+        {
+            if r.date == date
+            {
+                return
+            }
+        }
+        
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let dateInsert = df.string(from: date)
+        
+        let insertStatementString = "INSERT INTO reading (date, value, sensorId) VALUES (?, ?, ?);"
+        var insertStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
+            sqlite3_bind_text(insertStatement, 1, (dateInsert as NSString).utf8String, -1, nil)
+            sqlite3_bind_double(insertStatement, 2, Double(value))
+            sqlite3_bind_int(insertStatement, 3, Int32(sensorId))
+            
+            if sqlite3_step(insertStatement) == SQLITE_DONE {
+                print("Successfully inserted row.")
+            } else {
+                print("Could not insert row.")
+            }
+        } else {
+            print("INSERT statement could not be prepared.")
+        }
+        sqlite3_finalize(insertStatement)
+    }
+    
     func readSensors() -> [Sensor] {
         let queryStatementString = "SELECT * FROM sensor;"
         var queryStatement: OpaquePointer? = nil
         var psns : [Sensor] = []
         if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
-                let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 0)))
-                let description = String(describing: String(cString: sqlite3_column_text(queryStatement, 1)))
+                let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 1)))
+                let description = String(describing: String(cString: sqlite3_column_text(queryStatement, 2)))
                 psns.append(Sensor(name: name, description: description))
                 print("Query Result:")
                 print("\(name) | \(description)")
             }
         } else {
             print("SELECT statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        return psns
+    }
+    
+    func readReadings() -> [Reading] {
+        let queryStatementString = "SELECT * FROM reading;"
+        var queryStatement: OpaquePointer? = nil
+        var psns : [Reading] = []
+        
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let date = df.date(from: String(describing: String(cString: sqlite3_column_text(queryStatement, 1))))
+                
+                let value = Float(sqlite3_column_double(queryStatement, 2))
+                let sensorId = Int(sqlite3_column_int(queryStatement, 3))
+                psns.append(Reading(date: date!, value: value, sensorId: sensorId))
+            }
+        } else {
+            print("SELECT reading statement could not be prepared")
         }
         sqlite3_finalize(queryStatement)
         return psns
@@ -127,4 +202,18 @@ class DBHelper
         sqlite3_finalize(deleteStatement)
     }
     
+    func dropReadingsTable() {
+        let deleteStatementStirng = "DROP TABLE reading;"
+        var deleteStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, deleteStatementStirng, -1, &deleteStatement, nil) == SQLITE_OK {
+            if sqlite3_step(deleteStatement) == SQLITE_DONE {
+                print("Successfully removed table.")
+            } else {
+                print("Could not remove table.")
+            }
+        } else {
+            print("DROP statement could not be prepared")
+        }
+        sqlite3_finalize(deleteStatement)
+    }
 }
