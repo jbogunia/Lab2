@@ -172,6 +172,58 @@ class DBHelper
         return psns
     }
     
+    func getAvg() -> Float{
+        var average : Float = 0 ;
+        
+        let queryStatementString = "SELECT AVG(value) FROM reading;"
+        var queryStatement: OpaquePointer? = nil
+        
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                average = Float(sqlite3_column_double(queryStatement, 0))
+            }
+        } else {
+            print("AVERAGE reading statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        return average
+        
+    }
+    
+    func getSensorAvg() {
+        let queryStatementString = "SELECT sensor.name, AVG(reading.value) as average FROM sensor INNER JOIN reading ON sensor.id = reading.sensorId GROUP BY sensor.name;"
+        var queryStatement: OpaquePointer? = nil
+        
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 0)))
+                let average = Float(sqlite3_column_double(queryStatement, 1))
+                print("\(name) avg: \(average)")
+            }
+        } else {
+            print("AVERAGE reading statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        
+    }
+    
+    func getLargest() {
+        //Fix date to integer
+        let queryStatementString = "SELECT MAX(date) from reading;"
+        var queryStatement: OpaquePointer? = nil
+        
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 0)))
+                print("\(name) avg: \(average)")
+            }
+        } else {
+            print("AVERAGE reading statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        
+    }
+    
     func clearSensorTable() {
         let deleteStatementStirng = "DELETE FROM sensor;"
         var deleteStatement: OpaquePointer? = nil

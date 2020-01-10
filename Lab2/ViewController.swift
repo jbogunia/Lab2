@@ -17,28 +17,79 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-
-        db.insertSensor(name: "Name test", description: "DescTest")
-        db.insertSensor(name: "test2", description: "test2")
-        db.insertReading(date: Date(), value: 52, sensorId: 1)
+        testSqlLite()
         
+    }
+    
+    func testSqlLite() {
+        
+        
+        for n in 1...20 {
+            
+            var sensorName = "";
+            
+            if(n<10) {
+                sensorName = String(format: "S0%d", n)
+            } else {
+                sensorName = String(format: "S%d", n)
+            }
+            
+            let sensorDescription = String(format: "Sensor number %d", n)
+            
+            db.insertSensor(name: sensorName, description: sensorDescription)
+        }
+        
+       for n in 1...20 {
+            
+            let value = Float.random(in: 1...100)
+            let sensorId = Int.random(in: 0..<20)
+            let date = generateRandomDate(daysBack: 100)
+            
+            db.insertReading(date: date!, value: value, sensorId: sensorId)
+        }
+        
+        
+        
+    
+       // db.insertReading(date: Date(), value: 52, sensorId: 1)
+    
         sensors = db.readSensors()
-        
+    
         readings = db.readReadings()
-        
+    
         print("Sensors from DB")
     
         for sensor in sensors {
-            print(sensor.name + " " + sensor.description)
+        print(sensor.name + " " + sensor.description)
         }
-        
-        
+    
+    
         print("Readings from DB")
-        
+    
         for reading in readings {
-            print(reading.date)
+            print("Reading value: \(reading.value), sensorId: \(reading.sensorId), date: \(reading.date)")
         }
         
+        print("Average value= \(db.getAvg())")
+        
+        db.getSensorAvg()
+    
+    }
+    
+    func generateRandomDate(daysBack: Int)-> Date?{
+        let day = arc4random_uniform(UInt32(daysBack))+1
+        let hour = arc4random_uniform(23)
+        let minute = arc4random_uniform(59)
+        
+        let today = Date(timeIntervalSinceNow: 0)
+        let gregorian  = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)
+        var offsetComponents = DateComponents()
+        offsetComponents.day = -1 * Int(day - 1)
+        offsetComponents.hour = -1 * Int(hour)
+        offsetComponents.minute = -1 * Int(minute)
+        
+        let randomDate = gregorian?.date(byAdding: offsetComponents, to: today, options: .init(rawValue: 0) )
+        return randomDate
     }
 
 
