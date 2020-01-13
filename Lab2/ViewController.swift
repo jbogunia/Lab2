@@ -67,6 +67,7 @@ class ViewController: UIViewController {
         readingsA = loadReadingsA()
         
         averageReadingA()
+        sensorAverageReadingA()
         
     
         //
@@ -116,23 +117,30 @@ class ViewController: UIViewController {
         
         
         var sensors:[Int] = []
-        var average:[Float] = []
+        var average:[Float] = Array(repeating: 0.0, count: 20)
         
         if !readingsA.isEmpty {
-            for readingA in readingsA {
+            readingsA.forEach { readingA in
+        
                 if(sensors.contains(readingA.sensorId)) {
                     average[readingA.sensorId] = (average[readingA.sensorId] + readingA.value)/2
                 } else {
                     sensors.append(readingA.sensorId)
+                    //average.insert(readingA.value, at: readingA.sensorId)
                     average[readingA.sensorId] = readingA.value
                 }
-                
             }
         }
         
-        for avg in average {
-            print("Average value for sensor \(average.indexOf(avg)) is \(avg)")
+        
+        var i = 0;
+        average.forEach { avg in
+        i += 1
+        if(avg != 0.0) {
+            print("Average value for sensor \(i) is \(avg)")
         }
+        }
+        
     
     }
     
