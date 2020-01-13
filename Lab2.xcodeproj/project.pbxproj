@@ -16,6 +16,8 @@
 		4B48D07423C7C6DD00F2207F /* Sensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48D07323C7C6DD00F2207F /* Sensor.swift */; };
 		4B48D07623C7C72700F2207F /* DBHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48D07523C7C72700F2207F /* DBHelper.swift */; };
 		4B48D07823C7CF4F00F2207F /* Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B48D07723C7CF4F00F2207F /* Reading.swift */; };
+		4B4CE3D223CCA412000CF21A /* SensorA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4CE3D123CCA412000CF21A /* SensorA.swift */; };
+		4B4CE3D423CCA42F000CF21A /* ReadingA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B4CE3D323CCA42F000CF21A /* ReadingA.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		4B48D07323C7C6DD00F2207F /* Sensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sensor.swift; sourceTree = "<group>"; };
 		4B48D07523C7C72700F2207F /* DBHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelper.swift; sourceTree = "<group>"; };
 		4B48D07723C7CF4F00F2207F /* Reading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reading.swift; sourceTree = "<group>"; };
+		4B4CE3D123CCA412000CF21A /* SensorA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorA.swift; sourceTree = "<group>"; };
+		4B4CE3D323CCA42F000CF21A /* ReadingA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingA.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +76,8 @@
 				4B48D07323C7C6DD00F2207F /* Sensor.swift */,
 				4B48D07523C7C72700F2207F /* DBHelper.swift */,
 				4B48D07723C7CF4F00F2207F /* Reading.swift */,
+				4B4CE3D123CCA412000CF21A /* SensorA.swift */,
+				4B4CE3D323CCA42F000CF21A /* ReadingA.swift */,
 			);
 			path = Lab2;
 			sourceTree = "<group>";
@@ -149,7 +155,9 @@
 			files = (
 				4B48D06723C7C69700F2207F /* Lab2.xcdatamodeld in Sources */,
 				4B48D07423C7C6DD00F2207F /* Sensor.swift in Sources */,
+				4B4CE3D223CCA412000CF21A /* SensorA.swift in Sources */,
 				4B48D07823C7CF4F00F2207F /* Reading.swift in Sources */,
+				4B4CE3D423CCA42F000CF21A /* ReadingA.swift in Sources */,
 				4B48D07623C7C72700F2207F /* DBHelper.swift in Sources */,
 				4B48D06123C7C69700F2207F /* ViewController.swift in Sources */,
 				4B48D05F23C7C69700F2207F /* AppDelegate.swift in Sources */,

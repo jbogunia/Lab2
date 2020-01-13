@@ -3,11 +3,11 @@ import Foundation
 class Reading
 {
     
-    var date: Date = Date()
+    var date: Int = 0
     var value: Float = 0
     var sensorId: Int = 0
     
-    init(date:Date, value:Float, sensorId:Int)
+    init(date:Int, value:Float, sensorId:Int)
     {
         self.date = date
         self.value = value

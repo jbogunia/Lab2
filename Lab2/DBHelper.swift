@@ -53,7 +53,7 @@ class DBHelper
     }
     
     func createReadingsTable() {
-        let createTableString = "CREATE TABLE IF NOT EXISTS reading(id INTEGER PRIMARY KEY AUTOINCREMENT,date TEXT, value REAL, sensorId INTEGER, FOREIGN KEY (sensorId) REFERENCES Sensor (id));"
+        let createTableString = "CREATE TABLE IF NOT EXISTS reading(id INTEGER PRIMARY KEY AUTOINCREMENT,date INTEGER, value REAL, sensorId INTEGER, FOREIGN KEY (sensorId) REFERENCES Sensor (id));"
         var createTableStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, createTableString, -1, &createTableStatement, nil) == SQLITE_OK
         {
@@ -97,25 +97,25 @@ class DBHelper
         sqlite3_finalize(insertStatement)
     }
     
-    func insertReading(date:Date, value:Float, sensorId:Int)
+    func insertReading(date:Double, value:Float, sensorId:Int)
     {
         let readings = readReadings()
-        for r in readings
-        {
-            if r.date == date
-            {
-                return
-            }
-        }
+        //for r in readings
+        //{
+          //  if r.date == date
+            //{
+              //  return
+            //}
+        //}
         
-        let df = DateFormatter()
-        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        let dateInsert = df.string(from: date)
+ //       let df = DateFormatter()
+ //       df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+ //       let dateInsert = df.string(from: date)
         
         let insertStatementString = "INSERT INTO reading (date, value, sensorId) VALUES (?, ?, ?);"
         var insertStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
-            sqlite3_bind_text(insertStatement, 1, (dateInsert as NSString).utf8String, -1, nil)
+            sqlite3_bind_int(insertStatement, 1, Int32(date))
             sqlite3_bind_double(insertStatement, 2, Double(value))
             sqlite3_bind_int(insertStatement, 3, Int32(sensorId))
             
@@ -159,11 +159,12 @@ class DBHelper
         
         if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
-                let date = df.date(from: String(describing: String(cString: sqlite3_column_text(queryStatement, 1))))
+                //let date = df.date(from: String(describing: String(cString: sqlite3_column_text(queryStatement, 1))))
                 
                 let value = Float(sqlite3_column_double(queryStatement, 2))
                 let sensorId = Int(sqlite3_column_int(queryStatement, 3))
-                psns.append(Reading(date: date!, value: value, sensorId: sensorId))
+                let date = Int(sqlite3_column_int(queryStatement, 1))
+                psns.append(Reading(date: date, value: value, sensorId: sensorId))
             }
         } else {
             print("SELECT reading statement could not be prepared")
@@ -212,10 +213,47 @@ class DBHelper
         let queryStatementString = "SELECT MAX(date) from reading;"
         var queryStatement: OpaquePointer? = nil
         
+ //Specify your format that you want
+//        let strDate = dateFormatter.string(from: date)
+        
         if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
-                let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 0)))
-                print("\(name) avg: \(average)")
+
+                let date = Double(sqlite3_column_int(queryStatement, 0))
+                
+                let dateToFormat = Date(timeIntervalSince1970: date)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                let formattedDate = dateFormatter.string(from: dateToFormat)
+                print("Largest date is: \(formattedDate)")
+            }
+        } else {
+            print("AVERAGE reading statement could not be prepared")
+        }
+        sqlite3_finalize(queryStatement)
+        
+    }
+    
+    func getLowest() {
+        //Fix date to integer
+        let queryStatementString = "SELECT MIN(date) from reading;"
+        var queryStatement: OpaquePointer? = nil
+        
+ 
+        //        let strDate = dateFormatter.string(from: date)
+        
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                
+
+
+                let date = Double(sqlite3_column_int(queryStatement, 0))
+                
+                let dateToFormat = Date(timeIntervalSince1970: date)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+                let formattedDate = dateFormatter.string(from: dateToFormat)
+                print("Largest date is: \(formattedDate)")
             }
         } else {
             print("AVERAGE reading statement could not be prepared")
