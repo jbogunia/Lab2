@@ -86,11 +86,11 @@ class DBHelper
             sqlite3_bind_text(insertStatement, 1, (name as NSString).utf8String, -1, nil)
             sqlite3_bind_text(insertStatement, 2, (description as NSString).utf8String, -1, nil)
             
-            if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted row.")
-            } else {
-                print("Could not insert row.")
-            }
+            //if sqlite3_step(insertStatement) == SQLITE_DONE {
+             //   print("Successfully inserted row.")
+            //} else {
+              //  print("Could not insert row.")
+            //}
         } else {
             print("INSERT statement could not be prepared.")
         }
@@ -119,11 +119,11 @@ class DBHelper
             sqlite3_bind_double(insertStatement, 2, Double(value))
             sqlite3_bind_int(insertStatement, 3, Int32(sensorId))
             
-            if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted row.")
-            } else {
-                print("Could not insert row.")
-            }
+            //if sqlite3_step(insertStatement) == SQLITE_DONE {
+             //   print("Successfully inserted row.")
+            //} else {
+              //  print("Could not insert row.")
+            //}
         } else {
             print("INSERT statement could not be prepared.")
         }
@@ -173,7 +173,9 @@ class DBHelper
         return psns
     }
     
-    func getAvg() -> Float{
+    func getAvg() {
+        
+        let startTime = NSDate()
         var average : Float = 0 ;
         
         let queryStatementString = "SELECT AVG(value) FROM reading;"
@@ -187,11 +189,20 @@ class DBHelper
             print("AVERAGE reading statement could not be prepared")
         }
         sqlite3_finalize(queryStatement)
-        return average
+        
+        print("Average value: \(average)")
+        
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to average: \(measuredTime)")
+
         
     }
     
     func getSensorAvg() {
+        
+        let startTime = NSDate()
         let queryStatementString = "SELECT sensor.name, AVG(reading.value) as average FROM sensor INNER JOIN reading ON sensor.id = reading.sensorId GROUP BY sensor.name;"
         var queryStatement: OpaquePointer? = nil
         
@@ -206,9 +217,16 @@ class DBHelper
         }
         sqlite3_finalize(queryStatement)
         
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to get average by sensor: \(measuredTime)")
+        
     }
     
     func getLargest() {
+        
+        let startTime = NSDate()
         //Fix date to integer
         let queryStatementString = "SELECT MAX(date) from reading;"
         var queryStatement: OpaquePointer? = nil
@@ -231,10 +249,15 @@ class DBHelper
             print("AVERAGE reading statement could not be prepared")
         }
         sqlite3_finalize(queryStatement)
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
         
+        print("Time required to get largest date: \(measuredTime)")
     }
     
     func getLowest() {
+        
+        let startTime = NSDate()
         //Fix date to integer
         let queryStatementString = "SELECT MIN(date) from reading;"
         var queryStatement: OpaquePointer? = nil
@@ -259,6 +282,11 @@ class DBHelper
             print("AVERAGE reading statement could not be prepared")
         }
         sqlite3_finalize(queryStatement)
+        
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to get lowest date: \(measuredTime)")
         
     }
     

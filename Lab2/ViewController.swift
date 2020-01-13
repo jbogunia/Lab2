@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        //testSqlLite()
+        testSqlLite()
         testArchiving()
     
         
@@ -27,6 +27,8 @@ class ViewController: UIViewController {
     
     
     func testArchiving() {
+        print("**********Archiving testing**********")
+        let startTime = NSDate()
         
         for n in 1...20 {
             
@@ -57,8 +59,15 @@ class ViewController: UIViewController {
             readingsA.append(readingA!)
         }
         
-        
         saveReadingsA()
+        
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to generate sqlite data: \(measuredTime)")
+        
+        
+
         
         sensorsA = []
         readingsA = []
@@ -100,6 +109,10 @@ class ViewController: UIViewController {
     }
     
     private func averageReadingA() {
+        
+        
+        let startTime = NSDate()
+        // do something
         var average:Float = 0.0
         
         if !readingsA.isEmpty {
@@ -111,11 +124,17 @@ class ViewController: UIViewController {
         average = average/Float(readingsA.count)
         
        print("Average records value is: \(average)")
+        
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to get average: \(measuredTime)")
     }
     
     private func sensorAverageReadingA() {
         
-        
+        let startTime = NSDate()
+        // do something
         var sensors:[Int] = []
         var average:[Float] = Array(repeating: 0.0, count: 20)
         
@@ -131,22 +150,29 @@ class ViewController: UIViewController {
                 }
             }
         }
-        
+
         
         var i = 0;
         average.forEach { avg in
-        i += 1
-        if(avg != 0.0) {
-            print("Average value for sensor \(i) is \(avg)")
+            i += 1
+            if(avg != 0.0) {
+                print("Average value for sensor \(i) is \(avg)")
+            }
         }
-        }
+        
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to get average by sensor: \(measuredTime)")
         
     
     }
     
     func testSqlLite() {
         
+        print("**********SQLite testing**********")
         
+        let startTime = NSDate()
         for n in 1...20 {
             
             var sensorName = "";
@@ -172,28 +198,31 @@ class ViewController: UIViewController {
         }
         
         
+        let finishTime = NSDate()
+        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
         
+        print("Time required to generate sqlite data: \(measuredTime)")
     
        // db.insertReading(date: Date(), value: 52, sensorId: 1)
     
-        sensors = db.readSensors()
+       // sensors = db.readSensors()
     
-        readings = db.readReadings()
+        //readings = db.readReadings()
     
-        print("Sensors from DB")
+        //print("Sensors from DB")
     
-        for sensor in sensors {
-        print(sensor.name + " " + sensor.description)
-        }
+      //  for sensor in sensors {
+      //  print(sensor.name + " " + sensor.description)
+      //  }
     
     
-        print("Readings from DB")
+        //print("Readings from DB")
     
-        for reading in readings {
-            print("Reading value: \(reading.value), sensorId: \(reading.sensorId), date: \(reading.date)")
-        }
+        //for reading in readings {
+       //     print("Reading value: \(reading.value), sensorId: \(reading.sensorId), date: \(reading.date)")
+       // }
         
-        print("Average value= \(db.getAvg())")
+        db.getAvg()
         
         db.getSensorAvg()
         
