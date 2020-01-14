@@ -86,11 +86,9 @@ class DBHelper
             sqlite3_bind_text(insertStatement, 1, (name as NSString).utf8String, -1, nil)
             sqlite3_bind_text(insertStatement, 2, (description as NSString).utf8String, -1, nil)
             
-            //if sqlite3_step(insertStatement) == SQLITE_DONE {
-             //   print("Successfully inserted row.")
-            //} else {
-              //  print("Could not insert row.")
-            //}
+            if sqlite3_step(insertStatement) != SQLITE_DONE {
+               print("Could not insert row.")
+            }
         } else {
             print("INSERT statement could not be prepared.")
         }
@@ -119,11 +117,9 @@ class DBHelper
             sqlite3_bind_double(insertStatement, 2, Double(value))
             sqlite3_bind_int(insertStatement, 3, Int32(sensorId))
             
-            //if sqlite3_step(insertStatement) == SQLITE_DONE {
-             //   print("Successfully inserted row.")
-            //} else {
-              //  print("Could not insert row.")
-            //}
+           if sqlite3_step(insertStatement) != SQLITE_DONE {
+                print("Could not insert row.")
+            }
         } else {
             print("INSERT statement could not be prepared.")
         }
@@ -139,8 +135,6 @@ class DBHelper
                 let name = String(describing: String(cString: sqlite3_column_text(queryStatement, 1)))
                 let description = String(describing: String(cString: sqlite3_column_text(queryStatement, 2)))
                 psns.append(Sensor(name: name, description: description))
-                print("Query Result:")
-                print("\(name) | \(description)")
             }
         } else {
             print("SELECT statement could not be prepared")
@@ -176,7 +170,7 @@ class DBHelper
     func getAvg() {
         
         let startTime = NSDate()
-        var average : Float = 0 ;
+        var average: Float = 0.0;
         
         let queryStatementString = "SELECT AVG(value) FROM reading;"
         var queryStatement: OpaquePointer? = nil

@@ -19,16 +19,22 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        testSqlLite()
-        testArchiving()
+        //testSqlLite()
+        //testArchiving()
+        testCoreData()
+        
+    }
     
+    func testCoreData() {
         
     }
     
     
+    
+    
     func testArchiving() {
         print("**********Archiving testing**********")
-        let startTime = NSDate()
+        var startTime = NSDate()
         
         for n in 1...20 {
             
@@ -61,8 +67,8 @@ class ViewController: UIViewController {
         
         saveReadingsA()
         
-        let finishTime = NSDate()
-        let measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        var finishTime = NSDate()
+        var measuredTime = finishTime.timeIntervalSince(startTime as Date)
         
         print("Time required to generate sqlite data: \(measuredTime)")
         
@@ -78,6 +84,35 @@ class ViewController: UIViewController {
         averageReadingA()
         sensorAverageReadingA()
         
+        startTime = NSDate()
+        
+        let max = readingsA.max { $0.date < $1.date }
+        
+        let dateToFormat = Date(timeIntervalSince1970: Double(max!.date))
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let formattedDate = dateFormatter.string(from: dateToFormat)
+        print("Max date is: \(formattedDate)")
+        
+        finishTime = NSDate()
+        measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to get largest date: \(measuredTime)")
+        
+        startTime = NSDate()
+        let min = readingsA.min{$0.date < $1.date}
+        
+        let dateToFormat2 = Date(timeIntervalSince1970: Double(min!.date))
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "yyyy-MM-dd HH:mm"
+        let formattedDate2 = dateFormatter2.string(from: dateToFormat2)
+        
+        print("Min date is: \(formattedDate2)")
+        
+        finishTime = NSDate()
+        measuredTime = finishTime.timeIntervalSince(startTime as Date)
+        
+        print("Time required to get lowest date: \(measuredTime)")
     
         //
     }
@@ -168,6 +203,8 @@ class ViewController: UIViewController {
     
     }
     
+    
+    
     func testSqlLite() {
         
         print("**********SQLite testing**********")
@@ -205,9 +242,9 @@ class ViewController: UIViewController {
     
        // db.insertReading(date: Date(), value: 52, sensorId: 1)
     
-       // sensors = db.readSensors()
+        sensors = db.readSensors()
     
-        //readings = db.readReadings()
+        readings = db.readReadings()
     
         //print("Sensors from DB")
     
@@ -216,11 +253,12 @@ class ViewController: UIViewController {
       //  }
     
     
-        //print("Readings from DB")
+        print("Readings from DB")
+        print(sensors.count)
     
-        //for reading in readings {
-       //     print("Reading value: \(reading.value), sensorId: \(reading.sensorId), date: \(reading.date)")
-       // }
+        for reading in readings {
+            print("Reading value: \(reading.value), sensorId: \(reading.sensorId), date: \(reading.date)")
+        }
         
         db.getAvg()
         
